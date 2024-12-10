@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.6.21"
+    kotlin("jvm") version "1.9.24"
 }
 
 repositories {
@@ -8,12 +8,12 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.woowacourse-projects:mission-utils:1.0.0")
+    implementation("com.github.woowacourse-projects:mission-utils:1.2.0")
 }
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
