@@ -49,7 +49,7 @@ private fun runBridgeGame(
 
                 return retry(inputView, outputView, bridgeGame)
             }
-            return false
+            return true
         } catch (e: IllegalArgumentException) {
             println(e.message)
         }
