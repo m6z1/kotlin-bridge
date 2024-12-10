@@ -14,11 +14,20 @@ fun main() {
     val bridgeMaker = BridgeMaker(bridgeRandomNumberGenerator)
     val bridgeGame = BridgeGame()
 
-    val bridgeSize = inputView.readBridgeSize()
-    val bridge = bridgeMaker.makeBridge(bridgeSize)
-    bridgeGame.updateBridge(bridge)
+    while (true) {
+        try {
+            val bridgeSize = inputView.readBridgeSize()
+            val bridge = bridgeMaker.makeBridge(bridgeSize)
+            bridgeGame.updateBridge(bridge)
 
-    if (runBridgeGame(bridgeGame, inputView, outputView)) return
+            if (runBridgeGame(bridgeGame, inputView, outputView)) {
+                outputView.printResult(bridgeGame.gameResultUp, bridgeGame.gameResultDown, bridgeGame.retryCount)
+                return
+            }
+        } catch (e: IllegalArgumentException) {
+            println(e.message)
+        }
+    }
 }
 
 private fun runBridgeGame(
@@ -26,26 +35,38 @@ private fun runBridgeGame(
     inputView: InputView,
     outputView: OutputView,
 ): Boolean {
-    bridgeGame.bridge.forEach { oneSpace ->
-        val playerLocation = inputView.readMoving()
-        if (oneSpace == playerLocation) {
-            bridgeGame.move(playerLocation)
-            outputView.printMap(bridgeGame.gameResultUp, bridgeGame.gameResultDown)
-            return@forEach
-        }
-        bridgeGame.cantMove(playerLocation)
-        outputView.printMap(bridgeGame.gameResultUp, bridgeGame.gameResultDown)
+    while (true) {
+        try {
+            bridgeGame.bridge.forEach { oneSpace ->
+                val playerLocation = inputView.readMoving()
+                if (oneSpace == playerLocation) {
+                    bridgeGame.move(playerLocation)
+                    outputView.printMap(bridgeGame.gameResultUp, bridgeGame.gameResultDown)
+                    return@forEach
+                }
+                bridgeGame.cantMove(playerLocation)
+                outputView.printMap(bridgeGame.gameResultUp, bridgeGame.gameResultDown)
 
-        return retry(inputView, outputView, bridgeGame)
+                return retry(inputView, outputView, bridgeGame)
+            }
+            return false
+        } catch (e: IllegalArgumentException) {
+            println(e.message)
+        }
     }
-    return false
 }
 
 private fun retry(inputView: InputView, outputView: OutputView, bridgeGame: BridgeGame): Boolean {
-    val retry = inputView.readGameCommand()
-    when (GameRestartOrNot.from(retry)) {
-        GameRestartOrNot.RETRY -> bridgeGame.restart()
-        GameRestartOrNot.QUIT -> return true
+    while (true) {
+        try {
+            val retry = inputView.readGameCommand()
+            when (GameRestartOrNot.from(retry)) {
+                GameRestartOrNot.RETRY -> bridgeGame.restart()
+                GameRestartOrNot.QUIT -> return true
+            }
+            return runBridgeGame(bridgeGame, inputView, outputView)
+        } catch (e: Exception) {
+            println(e.message)
+        }
     }
-    return runBridgeGame(bridgeGame, inputView, outputView)
 }

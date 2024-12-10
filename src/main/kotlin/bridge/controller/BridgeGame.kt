@@ -15,6 +15,9 @@ class BridgeGame {
     private val _gameResultDown = mutableListOf<BridgePassResult>()
     val gameResultDown get() = _gameResultDown.toList()
 
+    var retryCount = 1
+        private set
+
     fun updateBridge(bridge: List<String>) {
         _bridge.clear()
         _bridge.addAll(bridge)
@@ -63,5 +66,6 @@ class BridgeGame {
     fun restart() {
         _gameResultUp.clear()
         _gameResultDown.clear()
+        retryCount++
     }
 }
