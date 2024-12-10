@@ -1,14 +1,14 @@
 package bridge.view
 
-/**
- * 사용자로부터 입력을 받는 역할을 한다.
- */
+import camp.nextstep.edu.missionutils.Console
+
 class InputView {
-    /**
-     * 다리의 길이를 입력받는다.
-     */
+
     fun readBridgeSize(): Int {
-        return 0
+        val readLine = Console.readLine()
+        val bridgeSize = readLine.toIntOrNull() ?: throw IllegalArgumentException("[ERROR] 다리 길이는 숫자만 입력할 수 있습니다.")
+        require(bridgeSize in 3..20) { "[ERROR] 다리 길이는 3 이상 20 이하로만 만들 수 있습니다." }
+        return bridgeSize
     }
 
     /**
