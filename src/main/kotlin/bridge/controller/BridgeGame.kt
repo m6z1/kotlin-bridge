@@ -3,6 +3,7 @@ package bridge.controller
 import bridge.model.BridgeLocation
 import bridge.model.BridgeMaker
 import bridge.model.BridgePassResult
+import bridge.model.GameRestartOrNot
 import bridge.view.InputView
 import bridge.view.OutputView
 
@@ -14,12 +15,13 @@ class BridgeGame(
     private val outputView: OutputView,
     private val bridgeMaker: BridgeMaker,
 ) {
+    private val bridge = mutableListOf<String>()
     private val gameResultUp = mutableListOf<BridgePassResult>()
     private val gameResultDown = mutableListOf<BridgePassResult>()
 
     fun start() {
         val bridgeSize = inputView.readBridgeSize()
-        val bridge = bridgeMaker.makeBridge(bridgeSize)
+        bridge.addAll(bridgeMaker.makeBridge(bridgeSize))
         bridge.forEach { oneSpace ->
             val playerLocation = inputView.readMoving()
             if (oneSpace == playerLocation) {
@@ -70,5 +72,15 @@ class BridgeGame(
             }
         }
 
+        val retry = inputView.readGameCommand()
+        when (GameRestartOrNot.from(retry)) {
+            GameRestartOrNot.RETRY -> restart()
+            GameRestartOrNot.QUIT -> return
+        }
+    }
+
+    private fun restart() {
+        gameResultUp.clear()
+        gameResultDown.clear()
     }
 }

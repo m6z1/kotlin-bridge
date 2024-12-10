@@ -15,15 +15,17 @@ class InputView {
      * 사용자가 이동할 칸을 입력받는다.
      */
     fun readMoving(): String {
-        val readLine = Console.readLine()
-        require(readLine == "U" || readLine == "D") { "[ERROR] 이동할 칸은 U(위 칸) / D(아래 칸) 만 입력할 수 있습니다." }
-        return readLine
+        val moving = Console.readLine()
+        require(moving == "U" || moving == "D") { "[ERROR] 이동할 칸은 U(위 칸) / D(아래 칸) 만 입력할 수 있습니다." }
+        return moving
     }
 
     /**
      * 사용자가 게임을 다시 시도할지 종료할지 여부를 입력받는다.
      */
     fun readGameCommand(): String {
-        return ""
+        val retryCommand = Console.readLine()
+        require(retryCommand == "R" || retryCommand == "Q") { "[ERROR] 재시작 여부는 R(재시작) / Q(종료) 만 입력할 수 있습니다." }
+        return retryCommand
     }
 }
