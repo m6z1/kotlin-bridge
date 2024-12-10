@@ -1,7 +1,7 @@
 package bridge.model
 
-enum class BridgePassResult {
-    PASS,
-    NOT_PASS,
-    CANT_PASS,
+enum class BridgePassResult(val content: String) {
+    PASS("O"),
+    NOT_PASS(" "),
+    CANT_PASS("X"),
 }

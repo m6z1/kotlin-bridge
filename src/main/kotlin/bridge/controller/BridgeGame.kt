@@ -50,7 +50,7 @@ class BridgeGame(
                 gameResultUp.add(BridgePassResult.NOT_PASS)
             }
         }
-        outputView.printResult()
+        outputView.printMap(upBridge = gameResultUp, downBridge = gameResultDown)
     }
 
     /**
@@ -71,6 +71,8 @@ class BridgeGame(
                 gameResultUp.add(BridgePassResult.NOT_PASS)
             }
         }
+
+        outputView.printMap(upBridge = gameResultUp, downBridge = gameResultDown)
 
         val retry = inputView.readGameCommand()
         when (GameRestartOrNot.from(retry)) {
