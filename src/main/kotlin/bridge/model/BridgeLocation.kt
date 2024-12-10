@@ -11,5 +11,11 @@ enum class BridgeLocation(private val title: String, private val code: String, p
                 it.number == number
             }?.code ?: throw IllegalArgumentException("[ERROR] 없는 숫자입니다.")
         }
+
+        fun fromCode(code: String): BridgeLocation {
+            return BridgeLocation.entries.find {
+                it.code == code
+            } ?: throw IllegalArgumentException("[ERROR] 없는 코드입니다.")
+        }
     }
 }

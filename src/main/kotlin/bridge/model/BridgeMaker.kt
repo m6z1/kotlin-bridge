@@ -18,8 +18,6 @@ class BridgeMaker(private val bridgeNumberGenerator: BridgeNumberGenerator) {
             }
             bridge.add(BridgeLocation.from(bridgeNumber))
         }
-
-        println(bridge)
         return bridge
     }
 }
