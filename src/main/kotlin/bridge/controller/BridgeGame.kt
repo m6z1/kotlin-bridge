@@ -1,5 +1,6 @@
 package bridge.controller
 
+import bridge.model.BridgeMaker
 import bridge.view.InputView
 import bridge.view.OutputView
 
@@ -9,10 +10,12 @@ import bridge.view.OutputView
 class BridgeGame(
     private val inputView: InputView,
     private val outputView: OutputView,
+    private val bridgeMaker: BridgeMaker,
 ) {
 
     fun start() {
         val bridgeSize = inputView.readBridgeSize()
+        bridgeMaker.makeBridge(bridgeSize)
     }
 
     /**
