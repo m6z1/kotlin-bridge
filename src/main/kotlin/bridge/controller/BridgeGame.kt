@@ -1,35 +1,23 @@
 package bridge.controller
 
 import bridge.model.BridgeLocation
-import bridge.model.BridgeMaker
 import bridge.model.BridgePassResult
-import bridge.model.GameRestartOrNot
-import bridge.view.InputView
-import bridge.view.OutputView
 
 /**
  * 다리 건너기 게임을 관리하는 클래스
  */
-class BridgeGame(
-    private val inputView: InputView,
-    private val outputView: OutputView,
-    private val bridgeMaker: BridgeMaker,
-) {
-    private val bridge = mutableListOf<String>()
-    private val gameResultUp = mutableListOf<BridgePassResult>()
-    private val gameResultDown = mutableListOf<BridgePassResult>()
+class BridgeGame {
+    private val _bridge = mutableListOf<String>()
+    val bridge get() = _bridge.toList()
 
-    fun start() {
-        val bridgeSize = inputView.readBridgeSize()
-        bridge.addAll(bridgeMaker.makeBridge(bridgeSize))
-        bridge.forEach { oneSpace ->
-            val playerLocation = inputView.readMoving()
-            if (oneSpace == playerLocation) {
-                move(playerLocation)
-                return@forEach
-            }
-            retry(playerLocation)
-        }
+    private val _gameResultUp = mutableListOf<BridgePassResult>()
+    val gameResultUp get() = _gameResultUp.toList()
+    private val _gameResultDown = mutableListOf<BridgePassResult>()
+    val gameResultDown get() = _gameResultDown.toList()
+
+    fun updateBridge(bridge: List<String>) {
+        _bridge.clear()
+        _bridge.addAll(bridge)
     }
 
     /**
@@ -41,16 +29,15 @@ class BridgeGame(
     fun move(location: String) {
         when (BridgeLocation.fromCode(location)) {
             BridgeLocation.UP -> {
-                gameResultUp.add(BridgePassResult.PASS)
-                gameResultDown.add(BridgePassResult.NOT_PASS)
+                _gameResultUp.add(BridgePassResult.PASS)
+                _gameResultDown.add(BridgePassResult.NOT_PASS)
             }
 
             BridgeLocation.DOWN -> {
-                gameResultDown.add(BridgePassResult.PASS)
-                gameResultUp.add(BridgePassResult.NOT_PASS)
+                _gameResultDown.add(BridgePassResult.PASS)
+                _gameResultUp.add(BridgePassResult.NOT_PASS)
             }
         }
-        outputView.printMap(upBridge = gameResultUp, downBridge = gameResultDown)
     }
 
     /**
@@ -59,30 +46,22 @@ class BridgeGame(
      *
      * 재시작을 위해 필요한 메서드의 반환 타입(return type), 인자(parameter)는 자유롭게 추가하거나 변경할 수 있다.
      */
-    fun retry(location: String) {
+    fun cantMove(location: String) {
         when (BridgeLocation.fromCode(location)) {
             BridgeLocation.UP -> {
-                gameResultUp.add(BridgePassResult.CANT_PASS)
-                gameResultDown.add(BridgePassResult.NOT_PASS)
+                _gameResultUp.add(BridgePassResult.CANT_PASS)
+                _gameResultDown.add(BridgePassResult.NOT_PASS)
             }
 
             BridgeLocation.DOWN -> {
-                gameResultDown.add(BridgePassResult.CANT_PASS)
-                gameResultUp.add(BridgePassResult.NOT_PASS)
+                _gameResultDown.add(BridgePassResult.CANT_PASS)
+                _gameResultUp.add(BridgePassResult.NOT_PASS)
             }
-        }
-
-        outputView.printMap(upBridge = gameResultUp, downBridge = gameResultDown)
-
-        val retry = inputView.readGameCommand()
-        when (GameRestartOrNot.from(retry)) {
-            GameRestartOrNot.RETRY -> restart()
-            GameRestartOrNot.QUIT -> return
         }
     }
 
-    private fun restart() {
-        gameResultUp.clear()
-        gameResultDown.clear()
+    fun restart() {
+        _gameResultUp.clear()
+        _gameResultDown.clear()
     }
 }
