@@ -50,12 +50,11 @@ class OutputView {
         upBridge: List<BridgePassResult>,
     ) {
         print("[")
-        upBridge.forEach {
-            if (upBridge.last() == it) {
-                print(" ${it.content} ")
-                return@forEach
+        upBridge.forEachIndexed { index, bridgePassResult ->
+            print(" ${bridgePassResult.content} ")
+            if (index < upBridge.size - 1) {
+                print("|")
             }
-            print(" ${it.content} |")
         }
         print("]")
     }
@@ -64,12 +63,11 @@ class OutputView {
         downBridge: List<BridgePassResult>,
     ) {
         print("[")
-        downBridge.forEach {
-            if (downBridge.last() == it) {
-                print(" ${it.content} ")
-                return@forEach
+        downBridge.forEachIndexed { index, bridgePassResult ->
+            print(" ${bridgePassResult.content} ")
+            if (index < downBridge.size - 1) {
+                print("|")
             }
-            print(" ${it.content} |")
         }
         print("]")
     }
